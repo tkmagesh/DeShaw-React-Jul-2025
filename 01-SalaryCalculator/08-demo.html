@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Calculator</title>
+    <script src="jquery-3.7.1.js"></script>
+    <style>
+        body{
+            margin-left: 50px;
+        }
+        .field{
+            margin-bottom: 10px;
+        }
+        label{
+            display: block;
+        }
+        td{
+            font-size: 18pt;
+            padding: 10px;
+        }
+    </style>
+    <script>
+        /* 
+        Assumptions:
+            1. The application is 100% functionally correct
+        */
+        /* NON UI */
+        /* Encapsulate the state and behavior of a Salary Calculator */
+        class SalaryCalculatorModel {
+            // state
+
+            // private by convention
+            _data = {
+                basic : 0,
+                hra : 0,
+                da : 0,
+                tax : 0,
+                salary : 0
+            }
+
+            _callbacks = {
+                basic : [],
+                hra : [],
+                da : [],
+                tax : [],
+                salary : []
+            }
+
+            get(attrName){
+                return this._data[attrName]
+            }
+
+            set(attrName, val){
+                this._data[attrName] = val
+                let callbackFns = this._callbacks[attrName];
+                for(let callbackFn of callbackFns){
+                    if (typeof callbackFn === 'function')
+                        callbackFn()
+                }
+            }
+
+            subscribe(attrName, callbackFn){
+                this._callbacks[attrName].push(callbackFn);
+            }
+
+            // behavior
+            calculate(){
+                let gross = this.get('basic') + this.get('hra') + this.get('da'),
+                    net = gross * ((100-this.get('tax'))/100);
+                this.set('salary', net);
+            }
+
+
+        }
+        
+        /* UI (View) */
+        class SalaryCalculator{
+            
+            _model = null
+            _$root = null;
+            _template = `
+            <section>
+                <div class="field">
+                    <label for="">Basic :</label><input type="number" name="" id="txtBasic">
+                </div>
+                <div class="field">
+                    <label for="">HRA</label><input type="number" name="" id="txtHRA">
+                </div>
+                <div class="field">
+                    <label for="">DA :</label><input type="number" name="" id="txtDA">
+                </div>
+                <div class="field">
+                    <label for="">Tax(%) :</label><input type="range" name="" id="rangeTax" min="0" max="30" value="0">
+                </div>
+                <div class="field">
+                    <button id="btnCalculate">Calculate</button>
+                </div>
+                <div class="field">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Basic</th>
+                                <th>HRA</th>
+                                <th>DA</th>
+                                <th>Tax</th>
+                                <th>Salary</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td id="tdBasic">basic</td>
+                            <td id="tdHRA">hra</td>
+                            <td id="tdDA">da</td>
+                            <td id="tdTax">tax</td>
+                            <td id="tdSalary">salary</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>`
+            
+            constructor(model){
+                let that = this;
+                this.$root = $('<div></div>')
+                this._model = model;
+
+                // Reacting to user actions
+                this.$root.on('change', '#txtBasic', function(){
+                    model.set('basic', parseInt($(this).val()))
+                })
+
+                this.$root.on('change', '#txtHRA', function(){
+                    model.set('hra', parseInt($(this).val()))
+                })
+
+                this.$root.on('change', '#txtDA', function(){
+                    model.set('da', parseInt($(this).val()))
+                })
+
+                this.$root.on('change', '#rangeTax', function(){
+                    model.set('tax', parseInt($(this).val()))
+                })
+
+                this.$root.on('click','#btnCalculate', function(){
+                     model.calculate()               
+                })
+
+                // Reacting to model changes
+                model.subscribe('salary', function(){
+                    $('#tdSalary', that.$root).text(model.get('salary'))
+                })
+
+                model.subscribe('basic',  function(){
+                    $('#tdBasic', that.$root).text(model.get('basic'))
+                })
+
+                model.subscribe('hra',  function(){
+                    $('#tdHRA', that.$root).text(model.get('hra'))
+                })
+
+                model.subscribe('da',  function(){
+                    $('#tdDA', that.$root).text(model.get('da'))
+                })
+
+                model.subscribe('tax',  function(){
+                    $('#tdTax', that.$root).text(model.get('tax'))
+                })
+            }
+
+            render(){
+                this.$root.html(this._template)
+            }
+        }
+
+        $(function(){
+
+            window['model'] = new SalaryCalculatorModel()
+
+            let v1 = new SalaryCalculator(model)
+            v1.$root.appendTo(document.body)
+            v1.render()
+
+            let v2 = new SalaryCalculator(model)
+            v2.$root.appendTo(document.body)
+            v2.render()
+            
+        })
+    </script>
+</head>
+<body>
+    <h1>Salary Calculator</h1>
+    <hr>
+    
+</body>
+</html>
