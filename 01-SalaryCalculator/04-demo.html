@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Calculator</title>
+    <script src="jquery-3.7.1.js"></script>
+    <style>
+        body{
+            margin-left: 50px;
+        }
+        .field{
+            margin-bottom: 10px;
+        }
+        label{
+            display: block;
+        }
+        td{
+            font-size: 18pt;
+            padding: 10px;
+        }
+    </style>
+    <script>
+        /* 
+        Assumptions:
+            1. The application is 100% functionally correct
+        */
+        /* NON UI */
+        /* Encapsulate the state and behavior of a Salary Calculator */
+        class SalaryCalculatorModel {
+            // state
+            basic = 0
+            hra = 0
+            da = 0
+            tax = 0
+            salary = 0
+
+            // 
+            onSalaryChange = null;
+
+
+            // behavior
+            calculate(){
+                let gross = this.basic + this.hra + this.da,
+                    net = gross * ((100-this.tax)/100);
+                this.salary = net;
+                if (typeof this.onSalaryChange === 'function')
+                    this.onSalaryChange()
+            }
+
+
+        }
+        /* UI */
+        $(function(){
+
+            window['model'] = new SalaryCalculatorModel()
+
+            $('#txtBasic').on('change', function(){
+                model.basic = parseInt($(this).val())
+            })
+
+            $('#txtHRA').on('change', function(){
+                model.hra = parseInt($(this).val())
+            })
+
+            $('#txtDA').on('change', function(){
+                model.da = parseInt($(this).val())
+            })
+
+            $('#rangeTax').on('change', function(){
+                model.tax = parseInt($(this).val())
+            })
+
+            $('#btnCalculate').click(function(){
+
+                
+                model.calculate()
+                
+                $('#tdBasic').text(model.basic)
+                $('#tdHRA').text(model.hra)
+                $('#tdDA').text(model.da)
+                $('#tdTax').text(model.tax)
+               
+            })
+
+            model.onSalaryChange = function(){
+                $('#tdSalary').text(model.salary)
+            }
+        })
+    </script>
+</head>
+<body>
+    <h1>Salary Calculator</h1>
+    <hr>
+    <section>
+        <div class="field">
+            <label for="">Basic :</label><input type="number" name="" id="txtBasic">
+        </div>
+        <div class="field">
+            <label for="">HRA</label><input type="number" name="" id="txtHRA">
+        </div>
+        <div class="field">
+            <label for="">DA :</label><input type="number" name="" id="txtDA">
+        </div>
+        <div class="field">
+            <label for="">Tax(%) :</label><input type="range" name="" id="rangeTax" min="0" max="30" value="0">
+        </div>
+        <div class="field">
+            <button id="btnCalculate">Calculate</button>
+        </div>
+        <div class="field">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Basic</th>
+                        <th>HRA</th>
+                        <th>DA</th>
+                        <th>Tax</th>
+                        <th>Salary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td id="tdBasic">basic</td>
+                    <td id="tdHRA">hra</td>
+                    <td id="tdDA">da</td>
+                    <td id="tdTax">tax</td>
+                    <td id="tdSalary">salary</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>
