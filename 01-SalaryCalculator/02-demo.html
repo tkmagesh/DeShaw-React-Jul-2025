@@ -25,21 +25,40 @@
         Assumptions:
             1. The application is 100% functionally correct
         */
-        $(function(){
-            $('#btnCalculate').click(function(){
-                let basic = parseInt($('#txtBasic').val()),
-                    hra = parseInt($('#txtHRA').val()),
-                    da = parseInt($('#txtDA').val()),
-                    tax = parseInt($('#rangeTax').val());
-                    
-                let gross = basic + hra + da,
-                    net = gross * ((100-tax)/100);
+        /* NON UI */
+        /* Encapsulate the state and behavior of a Salary Calculator */
+        class SalaryCalculatorModel {
+            // state
+            basic = 0
+            hra = 0
+            da = 0
+            tax = 0
+            salary = 0
 
-                $('#tdBasic').text(basic)
-                $('#tdHRA').text(hra)
-                $('#tdDA').text(da)
-                $('#tdTax').text(tax)
-                $('#tdSalary').text(net)
+            // behavior
+            calculate(){
+                let gross = this.basic + this.hra + this.da,
+                    net = gross * ((100-this.tax)/100);
+                this.salary = net;
+            }
+        }
+        /* UI */
+        $(function(){
+            let model = new SalaryCalculatorModel()
+            $('#btnCalculate').click(function(){
+
+                model.basic = parseInt($('#txtBasic').val()),
+                model.hra = parseInt($('#txtHRA').val()),
+                model.da = parseInt($('#txtDA').val()),
+                model.tax = parseInt($('#rangeTax').val());
+
+                model.calculate()
+
+                $('#tdBasic').text(model.basic)
+                $('#tdHRA').text(model.hra)
+                $('#tdDA').text(model.da)
+                $('#tdTax').text(model.tax)
+                $('#tdSalary').text(model.salary)
             })
         })
     </script>
