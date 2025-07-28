@@ -40,11 +40,11 @@
             }
 
             _callbacks = {
-                basic : null,
-                hra : null,
-                da : null,
-                tax : null,
-                salary : null
+                basic : [],
+                hra : [],
+                da : [],
+                tax : [],
+                salary : []
             }
 
             get(attrName){
@@ -53,13 +53,15 @@
 
             set(attrName, val){
                 this._data[attrName] = val
-                let callbackFn = this._callbacks[attrName];
-                if (typeof callbackFn === 'function')
-                    callbackFn()
+                let callbackFns = this._callbacks[attrName];
+                for(let callbackFn of callbackFns){
+                    if (typeof callbackFn === 'function')
+                        callbackFn()
+                }
             }
 
             subscribe(attrName, callbackFn){
-                this._callbacks[attrName] = callbackFn;
+                this._callbacks[attrName].push(callbackFn);
             }
 
             // behavior
