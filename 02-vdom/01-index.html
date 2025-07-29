@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VDOM Demo</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script>
+        let root ;
+        let counter = 0;
+        function onBtnRenderClick(){
+            // Browser's native DOM rendering
+            counter++
+            document.getElementById('spanCounter').innerText = counter;
+
+            // React's Virtual DOM rendering
+            let newDiv = React.createElement('div', { "id" : "newdiv" }, "counter :" + counter)
+            root.render(newDiv)
+        }
+        function onDocumentLoad(){
+            let btnRender = document.getElementById('btnRender')
+            btnRender.addEventListener('click', onBtnRenderClick)
+
+            root = ReactDOM.createRoot(document.getElementById('root'))
+        }
+        window.addEventListener('load', onDocumentLoad)
+    </script>
+</head>
+<body>
+    <button id="btnRender">Render</button>
+    <div>
+        <h3>Browser DOM</h3>
+        <div>
+            <span>Counter :</span>
+            <span id="spanCounter"></span>
+        </div>
+    </div>
+    <hr>
+    <div>
+        <h3>Virtual DOM</h3>
+        <div id="root">
+
+        </div>
+    </div>
+    
+</body>
+</html>
