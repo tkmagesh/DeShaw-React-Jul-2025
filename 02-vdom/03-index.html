@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VDOM Tree Demo</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <script type="text/babel">
+        let root ;
+        let counter = 0;
+        function onBtnRenderClick(){
+            counter++
+            let appEle = (
+                <div>
+                    <h3>React Intro</h3>
+                    <hr/>
+                    <div>
+                        <span>Counter :</span>
+                        <span>{counter}</span>
+                    </div>
+                    <div>
+                        <h4>Introduction</h4>
+                        <p>Qui magna dolor officia fugiat ex esse ipsum excepteur. Et proident incididunt veniam occaecat incididunt anim anim est enim duis pariatur minim consectetur fugiat. Deserunt magna enim nulla exercitation cillum esse nisi Lorem culpa cillum aute et occaecat.</p>
+                        <p>Veniam nisi deserunt cupidatat id reprehenderit in sunt commodo sit esse aliqua. Magna magna excepteur eu laboris. Lorem dolore eiusmod aliqua sit in reprehenderit mollit est in enim reprehenderit et incididunt proident. Voluptate ad nulla irure veniam laboris eiusmod ullamco exercitation excepteur voluptate ad cillum duis. Occaecat laborum velit Lorem sit incididunt aliqua id ex irure commodo. In velit exercitation veniam sit. Id dolore ipsum elit dolor laborum.</p>
+                        <p>Velit excepteur labore aliquip velit enim ut ipsum anim eu fugiat ut non et ipsum. Anim laboris tempor elit qui commodo cupidatat et voluptate dolore mollit. Nostrud cillum eu anim proident.</p>
+                    </div>
+                    <div>
+                        <h4>Advantages</h4>
+                        <ol>
+                            <li>Declarative</li>
+                            <li>Efficient</li>
+                        </ol>
+                    </div>
+                </div>
+            )
+            root.render(appEle)
+
+        }
+        function onDocumentLoad(){
+            let btnRender = document.getElementById('btnRender')
+            btnRender.addEventListener('click', onBtnRenderClick)
+
+            root = ReactDOM.createRoot(document.getElementById('root'))
+        }
+        window.addEventListener('load', onDocumentLoad)
+    </script>
+</head>
+<body>
+    <button id="btnRender">Render</button>
+    <div>
+        <h3>Virtual DOM</h3>
+        <div id="root">
+
+        </div>
+    </div>
+    
+</body>
+</html>
