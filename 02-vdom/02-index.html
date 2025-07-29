@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VDOM Tree Demo</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script>
+        let root ;
+        let counter = 0;
+        function onBtnRenderClick(){
+            counter++
+            let appEle = React.createElement('div', null, 
+                React.createElement('h3', null, 'React Intro'),
+                React.createElement('hr'),
+                React.createElement('div', null, 
+                    React.createElement('span', null, 'Counter :'),
+                    React.createElement('span', null, counter)
+                ),
+                React.createElement('div', null,
+                    React.createElement('h4', null, 'Introduction'),
+                    React.createElement('p', null, "Mollit reprehenderit exercitation culpa aliqua fugiat consectetur ex. Sit do esse excepteur pariatur dolor excepteur sit commodo incididunt officia est enim duis reprehenderit. Commodo eiusmod non laborum enim et laboris incididunt excepteur irure. Magna nostrud in enim commodo dolore tempor occaecat consequat minim ad ipsum tempor minim non."),
+                    React.createElement('p', null, "Duis eiusmod culpa quis sunt voluptate et ullamco proident. Nulla sunt proident deserunt id qui. Lorem enim Lorem ipsum sint sint tempor elit. Irure cillum amet velit est occaecat duis sint elit adipisicing commodo dolore commodo dolor adipisicing."),
+                    React.createElement('p', null, "Ipsum Lorem aliquip officia velit officia laboris. Commodo aliquip nostrud commodo adipisicing minim sint occaecat mollit qui non cupidatat. Non in aliqua nisi incididunt. Occaecat occaecat nostrud magna magna tempor dolore cillum laborum. Nostrud mollit quis elit ut sit est consectetur occaecat sint aliqua laboris ipsum ipsum. Laboris Lorem ut Lorem eiusmod eu Lorem quis do est sunt velit."),
+                ),
+                React.createElement('div', null,
+                    React.createElement('h4', null, 'Advantages'),
+                    React.createElement('ol', null, 
+                        React.createElement('li', null, "Declarative"),
+                        React.createElement('li', null, "Efficient"),
+                    )
+                )
+
+            )
+            root.render(appEle)
+
+        }
+        function onDocumentLoad(){
+            let btnRender = document.getElementById('btnRender')
+            btnRender.addEventListener('click', onBtnRenderClick)
+
+            root = ReactDOM.createRoot(document.getElementById('root'))
+        }
+        window.addEventListener('load', onDocumentLoad)
+    </script>
+</head>
+<body>
+    <button id="btnRender">Render</button>
+    <div>
+        <h3>Virtual DOM</h3>
+        <div id="root">
+
+        </div>
+    </div>
+    
+</body>
+</html>
