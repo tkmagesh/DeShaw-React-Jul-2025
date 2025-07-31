@@ -9,26 +9,47 @@
     <script src="babel.min.js"></script>
     <style>
         .result{
-            color : red;
+            font-size: 18pt;
         }
+        .positive{
+            color: green;
+        }
+        .negative{
+            color: red;
+        }
+
     </style>
     <script type="text/babel">
+        function Calculator(){
+            const [n1, setN1] = React.useState(0);
+            const [n2, setN2] = React.useState(0);
+            const [result, setResult] = React.useState(0);
+            return (
+                <div>
+                    <h3>Calculator</h3>
+                    <hr/>
+                    <label htmlFor="">Number 1:</label>
+                    <input type="number" value={n1} onChange={e => setN1(parseInt(e.target.value))}/>
+                    <label htmlFor="">Number 2:</label>
+                    <input type="number" value={n2} onChange={e => setN2(parseInt(e.target.value))}/>
+                    <br/>
+                    <button onClick={() => setResult(n1 + n2)}>Add</button>
+                    <button onClick={() => setResult(n1 - n2)}>Subtract</button>
+                    <div className={"result" + " " + (result >= 0 ? "positive" : "negative") }>
+                        {result}
+                    </div> 
+                </div>
+            )
+        }
 
+        const root = ReactDOM.createRoot(document.getElementById('root'))
+        root.render(<Calculator/>)
     </script>
 
 </head>
 <body>
     <div id="root">
-       <h3>Calculator</h3>
-       <hr>
-       <label for="">Number 1:</label>
-       <input type="number" name="" id="">
-       <label for="">Number 2:</label>
-       <input type="number" name="" id="">
-       <br>
-       <button>Add</button>
-       <button>Subtract</button>
-       <div class="result">[Result]</div> 
+       
     </div>
 </body>
 </html>
