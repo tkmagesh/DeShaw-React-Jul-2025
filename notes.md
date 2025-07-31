@@ -35,3 +35,11 @@
 Build a SalaryCalculator
     Salary = Basic + HRA + DA - Tax
 
+## React
+- View = Component
+    - Encapsulates Presentation + User Interaction + `UI` State
+
+### JSX (JavaScript in XML)
+- Every **open** tag MUST have corresponding **close** tag
+- Use `className` instead of `class` attribute
+- Use `htmlFor` instead of `for` attribute
