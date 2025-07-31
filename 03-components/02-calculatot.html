@@ -24,6 +24,7 @@
             const [n1, setN1] = React.useState(0);
             const [n2, setN2] = React.useState(0);
             const [result, setResult] = React.useState(0);
+            const [showResult, setShowResult] = React.useState(false);
             return (
                 <div>
                     <h3>Calculator</h3>
@@ -35,9 +36,15 @@
                     <br/>
                     <button onClick={() => setResult(n1 + n2)}>Add</button>
                     <button onClick={() => setResult(n1 - n2)}>Subtract</button>
-                    <div className={"result" + " " + (result >= 0 ? "positive" : "negative") }>
+                    <div>
+                        <span>Show Result ? :</span>
+                        <input type="checkbox" onChange={e => setShowResult(e.target.checked)} checked={showResult}/>
+                        <span>[{showResult.toString()}]</span>
+                    </div>
+                    { showResult && (<div className={"result" + " " + (result >= 0 ? "positive" : "negative") }>
                         {result}
-                    </div> 
+                    </div> )
+                    }
                 </div>
             )
         }
