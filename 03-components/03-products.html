@@ -9,18 +9,24 @@
     <script src="babel.min.js"></script>
     <script type="text/babel">
         function Products(){
-            const productNames = []
+            const [productNames, setProductNames] = React.useState([]);
+            const [newProductName, setNewProductName] = React.useState('');
+
+            const onBtnAddClick = () => {
+                setProductNames([...productNames, newProductName])
+            }
+
             return (
                 <div>
                     <h3>Products</h3>
                     <div>
                         <label htmlFor="">Count :</label>
-                        <span>[count]</span>
+                        <span>{productNames.length}</span>
                     </div>
                     <div>
                         <label htmlFor="">Product :</label>
-                        <input type="text" name="" id=""/>
-                        <button>Add</button>
+                        <input type="text" onChange={ e => setNewProductName(e.target.value) }/>
+                        <button onClick={onBtnAddClick}>Add</button>
                     </div>
                     <ul>
                         {productNames.map(productName => (<li key={productName}>{productName}</li>))}

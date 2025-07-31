@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Component - Hello World</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <style>
+        .message{
+            font-size: 15pt;
+            color:blue;
+        }
+                .result{
+            font-size: 18pt;
+        }
+        .positive{
+            color: green;
+        }
+        .negative{
+            color: red;
+        }
+
+    </style>
+    <script type="text/babel">
+        function Greeter(){
+
+            // UI State
+            let [greetMsg, setGreetMsg] = React.useState("Hello, World!");
+            let [userName, setUserName] = React.useState('');
+
+            // User Interaction
+            let onBtnGreetClick = () => {
+                setGreetMsg(`Hi ${userName}!, Have a nice day!`)
+            };
+            let onTxtUserNameChange = (e) => {
+                setUserName(e.target.value)
+            };
+
+            // Presentation
+            return (
+                <div>
+                    <h3>Greeter</h3>
+                    <hr/>
+                    <label htmlFor="">User Name:</label>
+                    <input type="text" onChange={onTxtUserNameChange}/>
+                    <button onClick={onBtnGreetClick}>Greet</button>
+                    <div className="message">{greetMsg}</div>
+                </div>
+            )
+        }
+
+        function Calculator(){
+            const [n1, setN1] = React.useState(0);
+            const [n2, setN2] = React.useState(0);
+            const [result, setResult] = React.useState(0);
+            const [showResult, setShowResult] = React.useState(false);
+            return (
+                <div>
+                    <h3>Calculator</h3>
+                    <hr/>
+                    <label htmlFor="">Number 1:</label>
+                    <input type="number" value={n1} onChange={e => setN1(parseInt(e.target.value))}/>
+                    <label htmlFor="">Number 2:</label>
+                    <input type="number" value={n2} onChange={e => setN2(parseInt(e.target.value))}/>
+                    <br/>
+                    <button onClick={() => setResult(n1 + n2)}>Add</button>
+                    <button onClick={() => setResult(n1 - n2)}>Subtract</button>
+                    <div>
+                        <span>Show Result ? :</span>
+                        <input type="checkbox" onChange={e => setShowResult(e.target.checked)} checked={showResult}/>
+                        <span>[{showResult.toString()}]</span>
+                    </div>
+                    { showResult && (<div className={"result" + " " + (result >= 0 ? "positive" : "negative") }>
+                        {result}
+                    </div> )
+                    }
+                </div>
+            )
+        }
+
+        function Products(){
+            const [productNames, setProductNames] = React.useState([]);
+            const [newProductName, setNewProductName] = React.useState('');
+
+            const onBtnAddClick = () => {
+                setProductNames([...productNames, newProductName])
+            }
+
+            return (
+                <div>
+                    <h3>Products</h3>
+                    <div>
+                        <label htmlFor="">Count :</label>
+                        <span>{productNames.length}</span>
+                    </div>
+                    <div>
+                        <label htmlFor="">Product :</label>
+                        <input type="text" onChange={ e => setNewProductName(e.target.value) }/>
+                        <button onClick={onBtnAddClick}>Add</button>
+                    </div>
+                    <ul>
+                        {productNames.map(productName => (<li key={productName}>{productName}</li>))}
+                    </ul>
+                </div>
+            )
+        }
+
+        let root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(
+            <div>
+                <h1>My App</h1>
+                <hr/>
+                <div>
+                    <button>Greeter</button>
+                    <button>Calculator</button>
+                    <button>Products</button>
+                </div>
+                <Greeter/>
+                <Calculator/>
+                <Products/>
+            </div>
+        )
+    </script>
+</head>
+<body>
+    <div id="root">
+        
+    </div>
+</body>
+</html>
