@@ -107,21 +107,26 @@
             )
         }
 
-        let root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(
-            <div>
+        function App(){
+            const [userChoice, setUserChoice] = React.useState('');
+            return (
+                <div>
                 <h1>My App</h1>
                 <hr/>
                 <div>
-                    <button>Greeter</button>
-                    <button>Calculator</button>
-                    <button>Products</button>
+                    <button onClick={() => setUserChoice('Greeter')}>Greeter</button>
+                    <button onClick={() => setUserChoice('Calculator')}>Calculator</button>
+                    <button onClick={() => setUserChoice('Products')}>Products</button>
                 </div>
-                <Greeter/>
-                <Calculator/>
-                <Products/>
+                { userChoice === "" && <div>Select your choice!</div>}
+                { userChoice === "Greeter" && <Greeter/>}
+                { userChoice === "Calculator" && <Calculator/>}
+                { userChoice === "Products" && <Products/>}
             </div>
-        )
+            )
+        }
+        let root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App/>)
     </script>
 </head>
 <body>
