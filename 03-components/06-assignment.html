@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug Tracker</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <style>
+        body{
+            margin-left: 20px;
+        }
+        section{
+            margin-bottom: 10px;
+        }
+        ul{
+            list-style: none;
+            width:500px;
+            -webkit-padding-start: 0px;
+        }
+        li{
+            margin-bottom: 10px;
+            padding:10px;
+            border : 1px solid gray;
+            border-radius: 5px;
+            background-color: #e7e7e7;
+        }
+        .bugname{
+            font-size: 18pt;
+            cursor: pointer;
+        }
+        .stats{
+            font-size: 18pt;
+        }
+        .closed{
+            color: red;
+            text-decoration: line-through;
+            font-style: italic;
+        }
+        .date{
+            font-style: italic;
+        }
+
+    </style>
+    <!-- 
+    Use Cases:
+        1. Add new bugs
+        2. Toggle the 'closed' status of any bug
+        3. Remove any bug
+        4. Remove all 'closed' bugs
+        5. Display stats 
+
+    Implementation Phases
+        Phase-1:
+            Implement all the functionalities in ONE component
+        Phase-2
+            Break the functionality in to the following components
+                - BugStats
+                - BugEditor
+                - BugList
+    -->
+    <script type="text/babel">
+        
+    </script>
+</head>
+<body>
+    <div id="root">
+        <h1>Bug Tracker</h1>
+        <hr>
+        <!-- BugStats -->
+        <section class="stats">
+            <span class="closed">1</span>
+            <span> / </span>
+            <span>2</span>
+        </section>
+        <!-- BugEditor -->
+        <section>
+            <label for="">Bug Name :</label>
+            <input type="text" />
+            <button>Add</button>
+        </section>
+        <!-- BugList -->
+        <section>
+            <ul>
+                <li>
+                    <span class="bugname closed">BugName-1</span>
+                    <div class="date">[createdAt]</div>
+                    <button>Remove</button>
+                </li>
+                <li>
+                    <span class="bugname">BugName-2</span>
+                    <div class="date">[createdAt]</div>
+                    <button>Remove</button>
+                </li>
+            </ul>
+            <button>Remove Closed</button>
+        </section>
+    </div>
+</body>
+</html>
