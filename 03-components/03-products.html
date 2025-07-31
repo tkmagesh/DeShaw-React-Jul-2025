@@ -16,6 +16,9 @@
                 setProductNames([...productNames, newProductName])
             }
 
+            const removeProduct = (productName) => {
+                setProductNames(productNames.filter(pName => pName !== productName ))
+            }
             return (
                 <div>
                     <h3>Products</h3>
@@ -29,7 +32,12 @@
                         <button onClick={onBtnAddClick}>Add</button>
                     </div>
                     <ul>
-                        {productNames.map(productName => (<li key={productName}>{productName}</li>))}
+                        {productNames.map(productName => (
+                            <li key={productName}>
+                                <span>{productName}</span>
+                                <button onClick={() => removeProduct(productName)}>X</button>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             )
