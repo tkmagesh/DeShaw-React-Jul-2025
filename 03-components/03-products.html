@@ -17,7 +17,9 @@
             }
 
             const removeProduct = (productName) => {
-                setProductNames(productNames.filter(pName => pName !== productName ))
+                const updatedProductNames = productNames.filter(pName => pName !== productName )
+                console.log(updatedProductNames)
+                setProductNames(updatedProductNames)
             }
             return (
                 <div>
@@ -32,8 +34,8 @@
                         <button onClick={onBtnAddClick}>Add</button>
                     </div>
                     <ul>
-                        {productNames.map(productName => (
-                            <li key={productName}>
+                        {productNames.map((productName,idx) => (
+                            <li key={`${productName}-${idx}`}>
                                 <span>{productName}</span>
                                 <button onClick={() => removeProduct(productName)}>X</button>
                             </li>
