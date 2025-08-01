@@ -43,3 +43,17 @@ Build a SalaryCalculator
 - Every **open** tag MUST have corresponding **close** tag
 - Use `className` instead of `class` attribute
 - Use `htmlFor` instead of `for` attribute
+
+## State
+### UI State
+- any state that assists in the user interaction responsibilities
+- It is highly unlikely that any change in the UI State is required to be recognised outside the component
+- Use React.useState() hook to maintain the UI State
+
+### Application State
+- any state that handles the core application domain logic
+- It is hight likely that the application state is needed throughout the application (across components)
+- DO NOT maintain this in the component (using React hooks)
+
+## State Manager
+![image](./images/udf.png)
