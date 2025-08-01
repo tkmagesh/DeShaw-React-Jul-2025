@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>State Manager</title>
+    <script src="state-manager.js"></script>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <!-- 
+    1. initial version
+    2. remove the direct dependency on the 'store' in the component
+    3. introduce 'action creators'
+    4. introduce 'action dispatchers'
+    5. generalize the creation of 'action dispatchers' (bindActionCreators)
+    -->
+    <script type="text/babel">
+        
+
+        function counterReducer(currentState = 50, action){
+            if (action.type === 'INCREMENT') return currentState + 1;
+            if (action.type === 'DECREMENT') return currentState - 1;
+            return currentState
+        }
+
+        const counterActionCreators = {
+            decrement(){
+                const action = { type : 'DECREMENT'};
+                return action;
+            },
+            increment(){
+                const action = { type : 'INCREMENT' };
+                return action    
+            }
+        }
+
+        function bindActionCreators(actionCreators, dispatch){
+            const actionDispatchers = {}
+            for (let key in actionCreators){
+                actionDispatchers[key] = function(...args){
+                    const action = actionCreators[key](...args)
+                    dispatch(action)
+                }
+            }
+            return actionDispatchers;
+        }
+        
+        const Counter = ({value, actionDispatchers}) => {
+        
+            const onBtnDecrementClick = () => {
+                actionDispatchers.decrement()
+            }
+
+            const onBtnIncrementClick = () => {
+                actionDispatchers.increment()
+            }
+
+            return (
+                <div>
+                    <h3>Counter</h3>
+                    <hr/>
+                    <button onClick={onBtnDecrementClick}>Decrement</button>
+                    <span>[{value}]</span>
+                    <button onClick={onBtnIncrementClick}>Increment</button>
+                </div>
+            );
+        }
+
+        const store = StateManager.createStore(counterReducer)
+
+        const root = ReactDOM.createRoot(document.getElementById('root'))
+
+        const counterActionDispatchers = bindActionCreators(counterActionCreators, store.dispatch)
+
+        function renderApp(){
+            const value = store.getState()
+            root.render(<Counter 
+                value={value} 
+                actionDispatchers = {counterActionDispatchers}
+            />)
+        }
+        renderApp()
+        store.subscribe(renderApp)
+    </script>
+</head>
+<body>
+    <div id="root">
+        
+    </div>
+</body>
+</html>
