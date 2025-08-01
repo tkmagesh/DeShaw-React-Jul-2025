@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>State Manager</title>
+    <script src="state-manager.js"></script>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <!-- 
+    1. initial version
+    2. remove the direct dependency on the 'store' in the component
+    3. introduce 'action creators'
+    4. introduce 'action dispatchers'
+    5. generalize the creation of 'action dispatchers' (bindActionCreators)
+    6. pass the individual 'action dispatcher methods' as props to the component
+    7. refactor the component (simplify)
+    8. move (refactored) 'bindActionCreators' to the 'StateManager'
+    9. accommodating 'payloads' in actions 
+    -->
+    <script type="text/babel">
+        
+
+        function counterReducer(currentState = 50, action){
+            if (action.type === 'INCREMENT') return currentState + action.payload;
+            if (action.type === 'DECREMENT') return currentState - action.payload;
+            return currentState
+        }
+
+        const counterActionCreators = {
+            decrement(delta){
+                const action = { type : 'DECREMENT', payload : delta};
+                return action;
+            },
+            increment(delta){
+                const action = { type : 'INCREMENT', payload : delta };
+                return action    
+            }
+        }
+
+        /* 
+        Reactive 
+            - displays the given data (value)
+            - invokes the given functions based on user interaction
+        */
+        const Counter = ({value, increment, decrement}) => {
+            // UI State
+            const [delta, setDelta] = React.useState(0)
+            return (
+                <div>
+                    <h3>Counter</h3>
+                    <hr/>
+                    <div>
+                    <label>Delta :</label>
+                    <input type="text" value={delta} onChange={e => setDelta(parseInt(e.target.value))}/>
+                    </div>
+                    <button onClick={() => decrement(delta)}>Decrement</button>
+                    <span>[{value}]</span>
+                    <button onClick={() => increment(delta)}>Increment</button>
+                </div>
+            );
+        }
+
+        const store = StateManager.createStore(counterReducer)
+
+        const root = ReactDOM.createRoot(document.getElementById('root'))
+
+        const counterActionDispatchers = StateManager.bindActionCreators(counterActionCreators, store.dispatch)
+
+        function renderApp(){
+            const value = store.getState()
+            root.render(<Counter 
+                value={value} 
+                {...counterActionDispatchers}
+            />)
+        }
+        renderApp()
+        store.subscribe(renderApp)
+    </script>
+</head>
+<body>
+    <div id="root">
+        
+    </div>
+</body>
+</html>
