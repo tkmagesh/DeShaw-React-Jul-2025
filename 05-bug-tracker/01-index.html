@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug Tracker</title>
+    <script src="state-manager.js"></script>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <style>
+        body{
+            margin-left: 20px;
+        }
+        section{
+            margin-bottom: 10px;
+        }
+        ul{
+            list-style: none;
+            width:500px;
+            -webkit-padding-start: 0px;
+        }
+        li{
+            margin-bottom: 10px;
+            padding:10px;
+            border : 1px solid gray;
+            border-radius: 5px;
+            background-color: #e7e7e7;
+        }
+        .bugname{
+            font-size: 18pt;
+            cursor: pointer;
+        }
+        .stats{
+            font-size: 18pt;
+        }
+        .closed{
+            color: red;
+            text-decoration: line-through;
+            font-style: italic;
+        }
+        .date{
+            font-style: italic;
+        }
+
+    </style>
+    <!-- 
+    Use Cases:
+        1. Add new bugs
+        2. Toggle the 'closed' status of any bug
+        3. Remove any bug
+        4. Remove all 'closed' bugs
+        5. Display stats 
+
+    Implementation Phases
+        Phase-1:
+            Implement all the functionalities in ONE component
+        Phase-2
+            Break the functionality in to the following components
+                - BugStats
+                - BugEditor
+                - BugList
+    -->
+    <script type="text/babel">
+
+        // temporary - to be removed
+        let _currentBugId = 0;
+
+        // actions
+        const bugActionCreators = {
+            createNew(newBugName){
+                const newBug = {
+                    id : ++_currentBugId,
+                    name : newBugName,
+                    isClosed : false,
+                    createdAt : new Date()
+                }
+                return {
+                    type : 'BUGS_ADD',
+                    payload : newBug
+                }
+            },
+            toggle(bugToToggle){
+                const toggledBug = {...bugToToggle, isClosed : !bugToToggle.isClosed}
+                return {
+                    type : 'BUGS_UPDATE',
+                    payload : toggledBug
+                }
+            },
+            remove(bugToRemove){
+                return {
+                    type : 'BUGS_REMOVE',
+                    payload : bugToRemove
+                }
+            },
+            removeClosed(bugs /* to be removed */){
+                const bugsToRetain = bugs.filter(bug => !bug.isClosed)
+                return {
+                    type : 'BUGS_LOAD',
+                    payload : bugsToRetain
+                }
+            }
+        }
+
+        function bugsReducer(currentState=[], action){
+            switch (action.type) {
+                case 'BUGS_ADD':
+                    return [...currentState, action.payload]
+                    break;
+                case 'BUGS_UPDATE':
+                    return currentState.map(bug => bug.id === action.payload.id ? action.payload : bug)
+                    break;
+                case 'BUGS_REMOVE':
+                    return currentState.filter(bug => bug.id !== action.payload.id)
+                case 'BUGS_LOAD':
+                    return action.payload;
+                default:
+                    return currentState;
+            }
+        }
+
+        
+
+        function BugTracker({bugs, createNew, toggle, remove, removeClosed}){
+
+            // to hold the new bug name entered by the user
+            const [newBugName, setNewBugName] = React.useState('');
+       
+            // count the number of closed bugs
+            const closedCount = bugs.reduce((cnt, bug) => bug.isClosed ? cnt + 1 : cnt, 0)
+
+            return (
+                <div>
+                    {/* BugStats */}
+                    <section className="stats">
+                        <span className="closed">{closedCount}</span>
+                        <span> / </span>
+                        <span>{bugs.length}</span>
+                    </section>
+                    {/* BugEditor */}
+                    <section>
+                        <label htmlFor="">Bug Name :</label>
+                        <input type="text" onChange={e => setNewBugName(e.target.value)} />
+                        <button onClick={() => createNew(newBugName)}>Add</button>
+                    </section>
+                    {/* BugList */}
+                    <section>
+                        <ul>
+                            { bugs.map((bug) => (
+                                /* BugItem */
+                                <li key={bug.id}>
+                                    <span 
+                                        className={"bugname " + (bug.isClosed ? 'closed' : '')}
+                                        onClick={() => toggle(bug)}
+                                    >{bug.name}</span>
+                                    <div className="date">{bug.createdAt.toString()}</div>
+                                    <button onClick={() => remove(bug)}>Remove</button>
+                                </li>
+                            ))}
+                        </ul>
+                        <button onClick={() => removeClosed(bugs)}>Remove Closed</button>
+                    </section>
+                </div>
+            )
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'))
+
+        const store = StateManager.createStore(bugsReducer);
+        const bugActionDispatchers = StateManager.bindActionCreators(bugActionCreators, store.dispatch)
+
+        function renderApp(){
+            const bugs = store.getState();
+            root.render(<BugTracker bugs={bugs} {...bugActionDispatchers}/>)
+        }
+        renderApp()
+        store.subscribe(renderApp)
+    </script>
+</head>
+<body>
+    <h1>Bug Tracker</h1>
+    <hr/>
+    <div id="root">
+        
+    </div>
+</body>
+</html>
