@@ -61,41 +61,108 @@
                 - BugList
     -->
     <script type="text/babel">
-        
+
+        // temporary - to be removed
+        let _currentBugId = 0;
+
+        function BugTracker(){
+
+            // to hold the list of bugs
+            const [bugs,setBugs] = React.useState([])
+
+            // to hold the new bug name entered by the user
+            const [newBugName, setNewBugName] = React.useState('');
+
+            const onBtnAddClick = () => {
+
+                // create a new bug object
+                const newBug = {
+                    id : ++_currentBugId,
+                    name : newBugName,
+                    isClosed : false,
+                    createdAt : new Date()
+                }
+
+                // update the component state
+                setBugs([...bugs, newBug])
+            }
+
+            const onBugToggleClick = (bugToToggle) => {
+
+                // toggle the given bug
+                const toggledBug = {...bugToToggle, isClosed : !bugToToggle.isClosed}
+
+                // create a new list with the old bug replaced with the toggled bug
+                const updatedBugs = bugs.map(bug => bug.id !== bugToToggle.id ? bug : toggledBug)
+
+                // update the component state
+                setBugs(updatedBugs)
+            }
+
+            const onBugRemoveClick = (bugToRemove) => {
+
+                // create a new list without the bugToRemove
+                const updatedBugs = bugs.filter(bug => bug.id !== bugToRemove.id)
+
+                // update the component state
+                setBugs(updatedBugs)
+            }
+
+            const onBtnRemoveClosedClick = () => {
+
+                // filter all open bugs
+                const allOpenBugs = bugs.filter(bug => !bug.isClosed)
+
+                // update the component state
+                setBugs(allOpenBugs)
+            }
+
+            // count the number of closed bugs
+            const closedCount = bugs.reduce((cnt, bug) => bug.isClosed ? cnt + 1 : cnt, 0)
+
+            return (
+                <div>
+                    {/* BugStats */}
+                    <section className="stats">
+                        <span className="closed">{closedCount}</span>
+                        <span> / </span>
+                        <span>{bugs.length}</span>
+                    </section>
+                    {/* BugEditor */}
+                    <section>
+                        <label htmlFor="">Bug Name :</label>
+                        <input type="text" onChange={e => setNewBugName(e.target.value)} />
+                        <button onClick={onBtnAddClick}>Add</button>
+                    </section>
+                    {/* BugList */}
+                    <section>
+                        <ul>
+                            { bugs.map((bug) => (
+                                <li key={bug.id}>
+                                    <span 
+                                        className={"bugname " + (bug.isClosed ? 'closed' : '')}
+                                        onClick={() => onBugToggleClick(bug)}
+                                    >{bug.name}</span>
+                                    <div className="date">{bug.createdAt.toString()}</div>
+                                    <button onClick={() => onBugRemoveClick(bug)}>Remove</button>
+                                </li>
+                            ))}
+                        </ul>
+                        <button onClick={onBtnRemoveClosedClick}>Remove Closed</button>
+                    </section>
+                </div>
+            )
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'))
+        root.render(<BugTracker/>)
     </script>
 </head>
 <body>
+    <h1>Bug Tracker</h1>
+    <hr/>
     <div id="root">
-        <h1>Bug Tracker</h1>
-        <hr>
-        <!-- BugStats -->
-        <section class="stats">
-            <span class="closed">1</span>
-            <span> / </span>
-            <span>2</span>
-        </section>
-        <!-- BugEditor -->
-        <section>
-            <label for="">Bug Name :</label>
-            <input type="text" />
-            <button>Add</button>
-        </section>
-        <!-- BugList -->
-        <section>
-            <ul>
-                <li>
-                    <span class="bugname closed">BugName-1</span>
-                    <div class="date">[createdAt]</div>
-                    <button>Remove</button>
-                </li>
-                <li>
-                    <span class="bugname">BugName-2</span>
-                    <div class="date">[createdAt]</div>
-                    <button>Remove</button>
-                </li>
-            </ul>
-            <button>Remove Closed</button>
-        </section>
+        
     </div>
 </body>
 </html>
