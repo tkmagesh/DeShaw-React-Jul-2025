@@ -1,7 +1,8 @@
 const StateManager = (() => {
   let _currentState = null,
     _subscribers = [],
-    _reducer = null;
+    _reducer = null,
+    _init_action = { type : '@INIT/ACTION'};
 
   function getState() {
     return _currentState;

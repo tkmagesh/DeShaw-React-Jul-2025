@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>State Manager</title>
+    <script src="state-manager.js"></script>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <script type="text/babel">
+        
+
+        function counterReducer(currentState = 50, action){
+            if (action.type === 'INCREMENT') return currentState + 1;
+            if (action.type === 'DECREMENT') return currentState - 1;
+            return currentState
+        }
+
+        
+        const Counter = ({store}) => {
+            const inc_action = { type : 'INCREMENT' },
+                dec_action = { type : 'DECREMENT'};
+
+            const counter = store.getState();
+
+            const onBtnDecrementClick = () => {
+                store.dispatch(dec_action)
+            }
+
+            const onBtnIncrementClick = () => {
+                store.dispatch(inc_action)
+            }
+
+            return (
+                <div>
+                    <h3>Counter</h3>
+                    <hr/>
+                    <button onClick={onBtnDecrementClick}>Decrement</button>
+                    <span>[{counter}]</span>
+                    <button onClick={onBtnIncrementClick}>Increment</button>
+                </div>
+            );
+        }
+
+        const store = StateManager.createStore(counterReducer)
+
+        const root = ReactDOM.createRoot(document.getElementById('root'))
+
+        function renderApp(){
+            root.render(<Counter store={store}/>)
+        }
+        renderApp()
+        store.subscribe(renderApp)
+    </script>
+</head>
+<body>
+    <div id="root">
+        
+    </div>
+</body>
+</html>
