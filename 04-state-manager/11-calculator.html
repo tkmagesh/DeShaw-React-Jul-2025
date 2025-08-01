@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Component - Hello World</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="babel.min.js"></script>
+    <script src="state-manager.js"></script>
+    <style>
+        .result{
+            font-size: 18pt;
+        }
+        .positive{
+            color: green;
+        }
+        .negative{
+            color: red;
+        }
+
+    </style>
+    <script type="text/babel">
+        function calculatorReducer(currentState = 0, action){
+            if (action.type === 'ADD') return action.payload.n1 + action.payload.n2;
+            if (action.type === 'SUBTRACT') return action.payload.n1 - action.payload.n2;
+            return currentState;
+        }
+
+        const calculatorActionCreators = {
+            add(n1, n2){
+                const action = {
+                    type : 'ADD',
+                    payload : { n1, n2 }
+                }
+                return action
+            },
+            subtract(n1, n2){
+                const action = {
+                    type : 'SUBTRACT',
+                    payload : { n1, n2 }
+                }
+                return action
+
+            }
+        }
+        function Calculator({result, add, subtract}){
+            const [n1, setN1] = React.useState(0);
+            const [n2, setN2] = React.useState(0);
+            const [showResult, setShowResult] = React.useState(false);
+            return (
+                <div>
+                    <h3>Calculator</h3>
+                    <hr/>
+                    <label htmlFor="">Number 1:</label>
+                    <input type="number" value={n1} onChange={e => setN1(parseInt(e.target.value))}/>
+                    <label htmlFor="">Number 2:</label>
+                    <input type="number" value={n2} onChange={e => setN2(parseInt(e.target.value))}/>
+                    <br/>
+                    <button onClick={() => add(n1 , n2)}>Add</button>
+                    <button onClick={() => subtract(n1 , n2)}>Subtract</button>
+                    <div>
+                        <span>Show Result ? :</span>
+                        <input type="checkbox" onChange={e => setShowResult(e.target.checked)} checked={showResult}/>
+                        <span>[{showResult.toString()}]</span>
+                    </div>
+                    { showResult && (<div className={"result" + " " + (result >= 0 ? "positive" : "negative") }>
+                        {result}
+                    </div> )
+                    }
+                </div>
+            )
+        }
+
+        const store = StateManager.createStore(calculatorReducer)
+        const calculatorActionDispatchers = StateManager.bindActionCreators(calculatorActionCreators, store.dispatch);
+
+        const root = ReactDOM.createRoot(document.getElementById('root'))
+        function renderApp(){
+            
+            root.render(<Calculator result={store.getState()} {...calculatorActionDispatchers}/>)
+        }
+        renderApp()
+        store.subscribe(renderApp)
+        
+    </script>
+
+</head>
+<body>
+    <div id="root">
+       
+    </div>
+</body>
+</html>
