@@ -10,7 +10,7 @@ import * as bugActionCreators from "./actions";
 function Bugs() {
 
   // extract state from the store
-  const bugs = useSelector(storeState => storeState);
+  const bugs = useSelector(storeState => storeState.bugs);
 
   // create action dispatchers
   const {createNew, toggle, remove, removeClosed} = bindActionCreators(
@@ -23,9 +23,12 @@ function Bugs() {
   );
   return (
     <div>
-      <BugStats count={bugs.length} closedCount={closedCount} />
-      <BugEditor onBugAdded={createNew} />
-      <BugList {...{ bugs, toggle, remove, removeClosed }} />
+      <h3>Bugs</h3>
+      <div>
+        <BugStats count={bugs.length} closedCount={closedCount} />
+        <BugEditor onBugAdded={createNew} />
+        <BugList {...{ bugs, toggle, remove, removeClosed }} />
+      </div>
     </div>
   );
 }
