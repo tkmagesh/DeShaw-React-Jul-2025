@@ -2,36 +2,18 @@ import BugStats from "./components/bug-stats";
 import BugEditor from "./components/bug-editor";
 import BugList from "./components/bug-list";
 import './index.css';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import { bindActionCreators } from "redux";
 import * as bugActionCreators from "./actions";
+import useBugs from "./hooks/useBugs";
+import useBugActionDispatchers from "./hooks/useBugActionDispatchers";
 
 // Container component
 function Bugs() {
 
+  const {bugs, projects, closedCount} = useBugs();
+  const { createNew, toggle, remove, removeClosed } = useBugActionDispatchers()
   
-  // extract state from the store
-  const {bugs, projects} = useSelector(({bugs, projects}) => {
-    return {
-      projects : projects,
-      bugs : bugs.map(bug => {
-        return {
-          ...bug,
-          projectName : projects.find(p => p.id === bug.projectId).name
-        }
-      })
-    }
-  });
-  
-  // create action dispatchers
-  const {createNew, toggle, remove, removeClosed} = bindActionCreators(
-    bugActionCreators,
-    useDispatch()
-  );
-  const closedCount = bugs.reduce(
-    (cnt, bug) => (bug.isClosed ? cnt + 1 : cnt),
-    0
-  );
   return (
     <div>
       <h3>Bugs</h3>
