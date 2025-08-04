@@ -9,9 +9,20 @@ import * as bugActionCreators from "./actions";
 // Container component
 function Bugs() {
 
+  
   // extract state from the store
-  const bugs = useSelector(storeState => storeState.bugs);
-
+  const {bugs, projects} = useSelector(({bugs, projects}) => {
+    return {
+      projects : projects,
+      bugs : bugs.map(bug => {
+        return {
+          ...bug,
+          projectName : projects.find(p => p.id === bug.projectId).name
+        }
+      })
+    }
+  });
+  
   // create action dispatchers
   const {createNew, toggle, remove, removeClosed} = bindActionCreators(
     bugActionCreators,
@@ -26,7 +37,7 @@ function Bugs() {
       <h3>Bugs</h3>
       <div>
         <BugStats count={bugs.length} closedCount={closedCount} />
-        <BugEditor onBugAdded={createNew} />
+        <BugEditor onBugAdded={createNew} projects={projects} />
         <BugList {...{ bugs, toggle, remove, removeClosed }} />
       </div>
     </div>
