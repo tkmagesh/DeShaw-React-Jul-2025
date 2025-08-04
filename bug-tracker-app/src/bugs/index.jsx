@@ -12,12 +12,13 @@ import useBugActionDispatchers from "./hooks/useBugActionDispatchers";
 function Bugs() {
 
   const {bugs, projects, closedCount} = useBugs();
-  const { createNew, toggle, remove, removeClosed } = useBugActionDispatchers()
+  const { createNew, toggle, remove, removeClosed, load } = useBugActionDispatchers()
   
   return (
     <div>
       <h3>Bugs</h3>
       <div>
+        <button onClick={load}>Load Bugs</button>
         <BugStats count={bugs.length} closedCount={closedCount} />
         <BugEditor onBugAdded={createNew} projects={projects} />
         <BugList {...{ bugs, toggle, remove, removeClosed }} />

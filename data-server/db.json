@@ -1,0 +1,33 @@
+{
+  "bugs": [
+    {
+      "id": 1,
+      "name": "Server communication failure",
+      "isClosed": false,
+      "createdAt": "2024-05-08T10:36:34.459Z",
+      "projectId": 2
+    },
+    {
+      "id": 2,
+      "name": "User access denied",
+      "isClosed": false,
+      "createdAt": "2024-05-08T10:36:34.459Z",
+      "projectId": 1
+    },
+    {
+      "id": 3,
+      "name": "Application not responsive",
+      "isClosed": false,
+      "createdAt": "2024-05-08T10:36:34.459Z",
+      "projectId": 2
+    },
+    {
+      "id": 4,
+      "name": "Unable to add anew bug",
+      "isClosed": false,
+      "createdAt": "2025-08-04T11:24:45.376Z",
+      "projectId": 3
+    }
+  ],
+  "projects": []
+}

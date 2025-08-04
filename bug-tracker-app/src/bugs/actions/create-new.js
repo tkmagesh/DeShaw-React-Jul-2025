@@ -1,16 +1,22 @@
-// temporary - to be removed
-let _currentBugId = 0;
+import axios from "axios";
 
 export function createNew(newBugName, projectId) {
-  const newBug = {
-    id: ++_currentBugId,
-    name: newBugName,
-    isClosed: false,
-    createdAt: new Date(),
-    projectId : projectId
-  };
-  return {
-    type: "BUGS_ADD",
-    payload: newBug,
-  };
+  return function(dispatch){
+    const newBugData = {
+      id: 0,
+      name: newBugName,
+      isClosed: false,
+      createdAt: new Date(),
+      projectId : projectId
+    };
+    axios
+      .post("http://localhost:3000/bugs", newBugData)
+      .then((response) => response.data)
+      .then((newBug) =>
+        dispatch({
+          type: "BUGS_ADD",
+          payload: newBug,
+        })
+      );
+  }
 }
