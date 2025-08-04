@@ -166,7 +166,6 @@
             )
         }
         
-
         function BugTracker({bugs, createNew, toggle, remove, removeClosed}){
             const closedCount = bugs.reduce((cnt, bug) => bug.isClosed ? cnt + 1 : cnt, 0)
             return (
