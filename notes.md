@@ -57,3 +57,30 @@ Build a SalaryCalculator
 
 ## State Manager
 ![image](./images/udf.png)
+
+## Container Components
+## Presentation Components
+
+## Redux Middleware
+- Used to encapsulate any logic that need to be applied across all the actions
+```js
+function [middlewareFnName] (store){
+    return function(next){
+        return function(action){
+            // do whatever you want to do with the action
+
+            // pass the action to the next middleware in the chain if needed
+            next(action)
+        }
+    }
+}
+
+// OR
+
+const [middlewareFnName] = store => next => action => {
+    // do whatever you want to do with the action
+
+    // pass the action to the next middleware in the chain if needed
+    next(action)
+}
+```
